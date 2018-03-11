@@ -5,8 +5,8 @@ import xml.etree.ElementTree as ElementTree
 
 import base64
 import boto3
-import os
 from onelogin.api.client import OneLoginClient
+import os
 
 from onelogin_aws_cli.configuration import Section
 from onelogin_aws_cli.credentials import MFACredentials, UserCredentials
