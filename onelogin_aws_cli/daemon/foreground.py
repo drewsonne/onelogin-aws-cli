@@ -1,53 +1,26 @@
 """
 Provide the foreground Process as a Thread
 """
-from threading import Event, Thread
 
 from onelogin_aws_cli import OneloginAWS
+from onelogin_aws_cli.daemon.runtime import RuntimeThread
 
 
-class ForegroundProcess(Thread):
+class ForegroundProcess(RuntimeThread):
     """
     Run the credentials renewal process in a process
     """
 
     def __init__(self, period: int, api: OneloginAWS):
-        super().__init__()
-
-        self._period = period
+        super().__init__(period, name="FederatedAuthProcess")
         self._api = api
 
-        self._running = False
-        self._sleep = Event()
-
-    def run(self):
+    def handle_run(self):
         """
-        Create a runtime for the foreground credentials renewal
-        """
-        self._running = True
-        while self._running:
-            self._sleep.wait(self._period)
-
-            # @TODO We should check if the credentials are going to expire
-            # in the immediate future, rather than constantly hitting
-            # the AWS API.
-            self._api.save_credentials()
-
-    def interrupt(self, signal_num: int, *args):
-        """
-        Received a shutdown signal.
-        Could implement HUP to perform a SAML refresh or something though.
-        :param signal_num:
-        :param args:
+        Call save credentials during our runtime
         """
 
-        self._sleep.set()
-
-        print("Shutting down Credentials refresh process...")
-
-        self._running = False
-
-        while self.is_alive():
-            self._sleep.wait(1)
-
-        print("Shutdown finished.")
+        # @TODO We should check if the credentials are going to expire
+        # in the immediate future, rather than constantly hitting
+        # the AWS API.
+        self._api.save_credentials()
