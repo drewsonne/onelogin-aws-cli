@@ -90,7 +90,6 @@ class UserCredentials(object):
     Class to encapsulate the handling of storing and retrieving user password
     in OS-Independent system keychain.
     """
-    SERVICE_NAME = "onelogin-aws-cli"
 
     def __init__(self, config: Section):
         self.username = config['username']
