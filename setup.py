@@ -32,7 +32,8 @@ setuptools.setup(
     install_requires=[
         'boto3',
         'onelogin',
-        'keyring'
+        'keyring',
+        'python3-saml'
     ],
     setup_requires=['nose>=1.0'],
     entry_points={
